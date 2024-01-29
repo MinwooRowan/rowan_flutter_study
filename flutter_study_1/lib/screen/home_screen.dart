@@ -11,20 +11,19 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFEFBE8),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: const Text('Home'),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.phone),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.mail),
-          ),
-        ],
-      ),
+          backgroundColor: Colors.transparent,
+          centerTitle: true,
+          title: const Text('Home'),
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.phone),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.mail),
+            )
+          ]),
       body: SizedBox(
         width: double.infinity,
         child: Column(
