@@ -13,7 +13,7 @@ class MealScreen extends StatelessWidget {
       backgroundColor: ColorConstant.backgroundColor,
       appBar: _buildAppBar(),
       body: MealLayout(
-        demoMeal: demoMealModel,
+        mealData: demoMealModel,
       ),
     );
   }
@@ -21,12 +21,12 @@ class MealScreen extends StatelessWidget {
 
 class MealLayout extends StatelessWidget {
   // MealScreen에서 MealLayout을 호출할 때 MealModel을 넘겨줘야 함
-  final MealModel demoMeal;
+  final MealModel mealData;
   // MealLayout({required this.demoMeal})을 통해 MealModel을 받음
   // required는 호출하는 쪽에서 명시적으로 어떤 파라미터에 어떤 값을 넘겨줘야 하는지 알려주는 역할
   // required를 사용하지 않으면
   // const MealLayout(this.demoMeal, {super.key}); 과 같이 사용 가능
-  const MealLayout({super.key, required this.demoMeal});
+  const MealLayout({super.key, required this.mealData});
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +39,13 @@ class MealLayout extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _TitleTextWidget(
-                titleText: demoMeal.mealTitle,
+                titleText: mealData.mealTitle,
               ),
               _MealInfoContainerWidget(
-                mealInfo: demoMeal.mealInfo,
+                mealInfo: mealData.mealInfo,
               ),
               _MealDescribe(
-                mealDescribe: demoMeal.mealDescribe,
+                mealDescribe: mealData.mealDescribe,
               ),
             ],
           ),
@@ -113,16 +113,16 @@ class _MealInfoContainerWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextContainer(
+          TextColumnContainer(
             titleText: 'TOTAL TIME',
             // '' 안에 ${}를 사용하여 변수를 넣어 String으로 사용할 수 있음
             valueText: '${mealInfo.totalMin}min',
           ),
-          TextContainer(
+          TextColumnContainer(
             titleText: 'YILED',
             valueText: '${mealInfo.serving}servings',
           ),
-          TextContainer(
+          TextColumnContainer(
             titleText: 'INGREDIENT',
             // 다른 string과 조합없이 String 변수만 사용할 경우 변수명만 넣을 수 있으나
             // string타입이 아닌 변수인 경우 .toString() 혹은 '${}'를 사용해야 함

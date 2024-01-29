@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:practice_1/constant/color_constant.dart';
 
-class TextContainer extends StatelessWidget {
+class TextColumnContainer extends StatelessWidget {
   final String titleText;
   final String valueText;
-  const TextContainer({
+  const TextColumnContainer({
     super.key,
     required this.titleText,
     required this.valueText,
