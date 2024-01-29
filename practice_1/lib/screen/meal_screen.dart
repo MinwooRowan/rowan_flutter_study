@@ -7,52 +7,13 @@ import 'package:practice_1/screen/widget/text_container_widget.dart';
 class MealScreen extends StatelessWidget {
   const MealScreen({super.key});
 
-  // meal데이터를 네트워크에서 가져오는 것을 시뮬레이션
-  Future<MealModel> getMealModel() async {
-    await Future.delayed(const Duration(seconds: 2));
-    return demoMealModel;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstant.backgroundColor,
       appBar: _buildAppBar(),
-      // 비동기(Future) 데이터를 가져올 때 사용하는 위젯
-      body: FutureBuilder<MealModel>(
-        // future: getMealModel()을 통해 가져온 데이터를 snapshot에 저장
-        future: getMealModel(),
-        builder: ((context, snapshot) {
-          // future함수가 성공적으로 데이터를 가져왔을 때
-          if (snapshot.hasData) {
-            return MealLayout(
-              demoMeal: snapshot.data!,
-            );
-            // future함수가 에러가 발생했을 때
-          } else if (snapshot.hasError) {
-            return const Center(
-              child: Text(
-                '요리 데이터를 가져오는데\n에러가 발생했습니다.',
-                textAlign: TextAlign.center,
-                style: TextStyle(),
-              ),
-            );
-            // future함수가 데이터를 가져오는 중일 때
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-            // future함수가 데이터를 가져오지 못했을 때
-          } else {
-            return const Center(
-              child: Text(
-                '요리 데이터를 가져오는데\n에러가 발생했습니다.',
-                textAlign: TextAlign.center,
-                style: TextStyle(),
-              ),
-            );
-          }
-        }),
+      body: MealLayout(
+        demoMeal: demoMealModel,
       ),
     );
   }
@@ -62,6 +23,9 @@ class MealLayout extends StatelessWidget {
   // MealScreen에서 MealLayout을 호출할 때 MealModel을 넘겨줘야 함
   final MealModel demoMeal;
   // MealLayout({required this.demoMeal})을 통해 MealModel을 받음
+  // required는 호출하는 쪽에서 명시적으로 어떤 파라미터에 어떤 값을 넘겨줘야 하는지 알려주는 역할
+  // required를 사용하지 않으면
+  // const MealLayout(this.demoMeal, {super.key}); 과 같이 사용 가능
   const MealLayout({super.key, required this.demoMeal});
 
   @override
@@ -98,10 +62,16 @@ class _ImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 240,
+      // 화면 상 가로 길이를 꽉 채우기 위해 double.infinity 사용
       width: double.infinity,
       child: Image.asset(
         ImagePathConstant.egg,
         fit: BoxFit.cover,
+        // fit: BoxFit.fill,
+        // fit: BoxFit.contain,
+        // fit: BoxFit.fitWidth,
+        // fit: BoxFit.fitHeight,
+        // 등이 있음
       ),
     );
   }
@@ -145,6 +115,7 @@ class _MealInfoContainerWidget extends StatelessWidget {
         children: [
           TextContainer(
             titleText: 'TOTAL TIME',
+            // '' 안에 ${}를 사용하여 변수를 넣어 String으로 사용할 수 있음
             valueText: '${mealInfo.totalMin}min',
           ),
           TextContainer(
@@ -153,6 +124,8 @@ class _MealInfoContainerWidget extends StatelessWidget {
           ),
           TextContainer(
             titleText: 'INGREDIENT',
+            // 다른 string과 조합없이 String 변수만 사용할 경우 변수명만 넣을 수 있으나
+            // string타입이 아닌 변수인 경우 .toString() 혹은 '${}'를 사용해야 함
             valueText: mealInfo.mainIngredient,
           ),
         ],
