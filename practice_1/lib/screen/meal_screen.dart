@@ -97,6 +97,11 @@ class _TitleTextWidget extends StatelessWidget {
           height: 1,
           color: ColorConstant.greenColor,
         ),
+        // OR Container로 구분선 만들기
+        // Container(
+        //   height: 1,
+        //   color: ColorConstant.greenColor,
+        // ),
       ],
     );
   }
@@ -152,6 +157,7 @@ class _MealDescribe extends StatelessWidget {
   }
 }
 
+// 함수로 위젯 리턴시키기
 AppBar _buildAppBar() {
   return AppBar(
     centerTitle: false,
