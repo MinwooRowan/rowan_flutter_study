@@ -3,19 +3,39 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:http_test/model/timezone_model.dart';
 
-class ClockScreen extends StatelessWidget {
+class ClockScreen extends StatefulWidget {
   const ClockScreen({super.key});
 
   static const String timeApiUrl =
       'http://worldtimeapi.org/api/timezone/Asia/Seoul';
 
+  @override
+  State<ClockScreen> createState() => _ClockScreenState();
+}
+
+class _ClockScreenState extends State<ClockScreen> {
+  TimeZoneModel? timeZoneModel;
+  bool isFetching = false;
+  @override
+  initState() {
+    super.initState();
+    _setFetchingTime();
+  }
+
+  Future<void> _setFetchingTime() async {
+    timeZoneModel = await fetchTime();
+  }
+
   // http 통신을 통해 시간 정보를 가져오는 메서드
   Future<TimeZoneModel> fetchTime() async {
-    final response = await http.get(Uri.parse(timeApiUrl));
+    final response = await http.get(Uri.parse(ClockScreen.timeApiUrl));
     // 200 OK 응답이면
     // 시간 정보를 json으로 변환하여 TimeZoneModel 객체로 변환하여 반환
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
+      setState(() {
+        isFetching = false;
+      });
       return TimeZoneModel.fromJson(data);
     } else {
       // 200 OK 응답이 아니면 예외를 발생시킴 *(에러)
@@ -28,20 +48,43 @@ class ClockScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.blueGrey,
       body: Center(
-        child: FutureBuilder(
-          future: fetchTime(),
-          builder: (context, timeZoneData) {
-            if (timeZoneData.hasData) {
-              return TimeStreamWidget(
-                startDateTime: timeZoneData.data!.getDateTime()!,
-              );
-            } else if (timeZoneData.hasError) {
-              return Text('Error: ${timeZoneData.error}');
-            } else {
-              return const CircularProgressIndicator();
-            }
-          },
-        ),
+        child: isFetching
+            ? const CircularProgressIndicator()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      setState(() {
+                        isFetching = true;
+                      });
+                      await _setFetchingTime();
+                    },
+                    child: const Text('시간 가져오기'),
+                  ),
+
+                  if (timeZoneModel == null)
+                    const CircularProgressIndicator()
+                  else
+                    TimeStreamWidget(
+                      startDateTime: timeZoneModel!.getDateTime()!,
+                    ),
+                  // FutureBuilder(
+                  //   future: fetchTime(),
+                  //   builder: (context, timeZoneData) {
+                  //     if (timeZoneData.hasData) {
+                  //       return TimeStreamWidget(
+                  //         startDateTime: timeZoneData.data!.getDateTime()!,
+                  //       );
+                  //     } else if (timeZoneData.hasError) {
+                  //       return Text('Error: ${timeZoneData.error}');
+                  //     } else {
+                  //       return const CircularProgressIndicator();
+                  //     }
+                  //   },
+                  // ),
+                ],
+              ),
       ),
     );
   }
