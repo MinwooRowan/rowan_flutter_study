@@ -79,13 +79,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const SizedBox(height: 8),
             TextField(
               controller: ageController,
-              keyboardType: TextInputType.number,
+              keyboardType: TextInputType.text,
               decoration: const InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-                labelText: 'Enter your age',
-              ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  labelText: 'Enter your age',
+                  hintText: '나이'),
             ),
             const SizedBox(height: 20),
             Text(
