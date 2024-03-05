@@ -10,17 +10,16 @@ class User extends _$User {
     return const AsyncValue.loading();
   }
 
-  // 성공적으로 데이터를 받아오는 메소드
+  // 데이터를 받아오는 메소드
   Future<void> fetchData() async {
-    await Future.delayed(const Duration(seconds: 1));
-    state =
-        AsyncValue.data(UserModel(name: 'John Doe', email: 'rowan@gmail.com'));
-  }
-
-  // 에러가 발생하고, 해당 에러를 AsyncError로 처리하는 메소드
-  Future<void> fetchError() async {
-    await Future.delayed(const Duration(seconds: 1));
-    state = AsyncValue.error('An error occurred', StackTrace.current);
+    state = const AsyncValue.loading();
+    try {
+      await Future.delayed(const Duration(seconds: 1));
+      state = AsyncValue.data(
+          UserModel(name: 'John Doe', email: 'rowan@gmail.com'));
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.fromString(e.toString()));
+    }
   }
 
   void setNewName({required String newName}) {
